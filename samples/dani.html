@@ -1,0 +1,51 @@
+
+<!doctype html>
+<html>
+<head>
+    <title>dash.js Rocks</title>
+    <style>
+        video {
+            width: 640px;
+            height: 360px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <video id="videoPlayer" controls></video>
+</div>
+<!-- <script src="http://cdn.dashjs.org/latest/dash.all.min.js"></script> -->
+<script src="../dist/modern/umd/dash.all.debug.js"></script>
+<script>
+    (function () {
+        var filterCapabilities = function (representation) {
+            console.log('Representation', representation);
+            /* Filter representations based on certain attributes like the resolution. Return false to filter specific representation */
+            if (representation.mimeType === "video/mp4") {
+                return representation.height <= 720;
+            }
+            return false;
+        }
+
+        //var url = "http://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd";
+        var url ="http://cmafref.akamaized.net/cmaf/live-ull/2006350/akambr/out.mpd"
+        var player = dashjs.MediaPlayer().create();
+        player.initialize(document.querySelector("#videoPlayer"), url, true);
+        player.registerCustomCapabilitiesFilter(filterCapabilities) ;
+        player.updateSettings({
+            debug: {logLevel: 3},  //info=4
+            //streaming: {cacheInitSegments: true}
+            streaming: {
+                //lowLatencyEnabled: false,
+                abr: {
+                    maxBitrate: { audio: 100, video: 1500 }
+                }
+            }
+        });
+        //player.setInitialMediaSettingsFor('audio', { enabled: false });    
+        //player.setMute(true);
+
+    })();
+</script>
+</body>
+</html>

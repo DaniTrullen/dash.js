@@ -114,6 +114,7 @@ function SourceBufferSink(config) {
                 return _initializeForText(streamInfo);
             }
 
+            console.log( `DANI: initializeForFirstUse: addSourceBuffer codec=${codec}` );
             buffer = mediaSource.addSourceBuffer(codec);
 
             _addEventListeners();
@@ -371,6 +372,7 @@ function SourceBufferSink(config) {
                 } else {
                     try {
                         logger.debug(`Appending ${nextChunk.data.segmentType} from period ${nextChunk.data.streamId} to buffer. Request URL: ${nextChunk.request.url}, Representation: ID: ${nextChunk.data.representation.id}, bitrate: ${nextChunk.data.representation.bitrateInKbit}`)
+                        console.log(`DANI: MSE appendBuffer. Request URL: ${nextChunk.request.url}, Representation: ID: ${nextChunk.data.representation.id}, bitrate: ${nextChunk.data.representation.bitrateInKbit}`)
                     } catch (e) {
 
                     }
@@ -439,7 +441,7 @@ function SourceBufferSink(config) {
         if (buffer.updating) {
             return;
         }
-
+        //console.log( 'DANI: _updateEndHandler' );
         // updating is completed, now we can stop checking and resolve the promise
         _executeCallback();
     }
